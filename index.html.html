@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPASO MIS PRIMERAS LETRAS - 1º PRIMARIA</title>
+    <!-- Fuentes redondeadas, divertidas y muy visuales -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta multicolor infantil */
+            --color-borde: #1e293b;
+            --azul-bonito: #3b82f6;
+            --rosa-brillante: #ec4899;
+            --amarillo-sol: #f59e0b;
+            --verde-manzana: #10b981;
+            --morado-suave: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Fredoka', 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #fbcfe8 50%, #fef3c7 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Ventana principal con marco grueso de 6px */
+        .ventana-principal {
+            background-color: #ffffff;
+            border: 6px solid var(--color-borde);
+            border-radius: 35px;
+            width: 100%;
+            max-width: 900px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 12px 0px var(--color-borde), 0 20px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: aparecer 0.5s ease-out;
+        }
+
+        @keyframes aparecer {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Título grande y llamativo */
+        .titulo-principal {
+            color: var(--azul-bonito);
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            line-height: 1.1;
+            text-shadow: 3px 3px 0px #bfdbfe;
+        }
+
+        /* Subtítulo de 1º PRIMARIA - LENGUA */
+        .subtitulo {
+            color: var(--rosa-brillante);
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background-color: #fce7f3;
+            padding: 8px 24px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 35px;
+            border: 3px solid var(--rosa-brillante);
+        }
+
+        /* Rejilla de las 3 fichas */
+        .grid-fichas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        /* Tarjeta / Ficha interactiva con borde de 6px */
+        .tarjeta-ficha {
+            border: 6px solid var(--color-borde);
+            border-radius: 25px;
+            padding: 25px 15px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 230px;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 0px var(--color-borde);
+        }
+
+        .tarjeta-ficha:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 0px var(--color-borde);
+        }
+
+        .tarjeta-ficha:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0px var(--color-borde);
+        }
+
+        /* Colores específicos para cada ficha */
+        .ficha-p {
+            background-color: #fef08a;
+        }
+        .ficha-m {
+            background-color: #bbf7d0;
+        }
+        .ficha-l {
+            background-color: #ddd6fe;
+        }
+
+        /* Iconos 3D de palabras grandes y animados */
+        .icono-3d {
+            font-size: 4.2rem;
+            margin: 10px 0;
+            line-height: 1;
+            filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+            animation: flotar 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes flotar {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-8px) rotate(4deg); }
+        }
+
+        .tarjeta-ficha:hover .icono-3d {
+            transform: scale(1.2) rotate(6deg);
+            animation-play-state: paused;
+        }
+
+        .titulo-letra {
+            color: var(--color-borde);
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 5px 0;
+        }
+
+        .etiqueta-palabra {
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: var(--color-borde);
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 15px;
+            margin-top: 5px;
+        }
+
+        /* Créditos */
+        .creditos {
+            border-top: 4px dashed #cbd5e1;
+            padding-top: 20px;
+            color: #475569;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .creditos strong {
+            color: var(--azul-bonito);
+            font-weight: 800;
+        }
+
+        @media (max-width: 650px) {
+            .titulo-principal { font-size: 2.2rem; }
+            .subtitulo { font-size: 1.2rem; }
+            .ventana-principal { border-width: 5px; padding: 25px 15px; }
+            .tarjeta-ficha { border-width: 5px; }
+            .icono-3d { font-size: 3.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ventana-principal">
+
+        <!-- Encabezado de la aplicación -->
+        <h1 class="titulo-principal">REPASO MIS PRIMERAS LETRAS</h1>
+        <div class="subtitulo">1º PRIMARIA - LENGUA</div>
+
+        <!-- Rejilla con las 3 Fichas -->
+        <div class="grid-fichas">
+
+            <!-- Ficha 1: Letra P (Palabra de ejemplo: Pelota ⚽) -->
+            <a href="Aprende la letra P.html" class="tarjeta-ficha ficha-p" target="_blank">
+                <div class="titulo-letra">Letra P</div>
+                <div class="icono-3d">⚽</div>
+                <div class="etiqueta-palabra">Pelota ➔</div>
+            </a>
+
+            <!-- Ficha 2: Letra M (Palabra de ejemplo: Mariposa 🦋) -->
+            <a href="Aprende la M.html" class="tarjeta-ficha ficha-m" target="_blank">
+                <div class="titulo-letra">Letra M</div>
+                <div class="icono-3d">🦋</div>
+                <div class="etiqueta-palabra">Mariposa ➔</div>
+            </a>
+
+            <!-- Ficha 3: Letra L (Palabra de ejemplo: León 🦁) -->
+            <a href="aprendemos_la_letra_l.html" class="tarjeta-ficha ficha-l" target="_blank">
+                <div class="titulo-letra">Letra L</div>
+                <div class="icono-3d">🦁</div>
+                <div class="etiqueta-palabra">León ➔</div>
+            </a>
+
+        </div>
+
+        <!-- Créditos finales -->
+        <div class="creditos">
+            Elaborado por <strong>Carlos Garrido</strong>
+        </div>
+
+    </div>
+
+</body>
+</html>

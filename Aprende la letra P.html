@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendemos la Letra P - Lectoescritura Infantil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Andika&family=Fredoka:wght@400;600;700;800&family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Fredoka', 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #e0e7ff 50%, #fbcfe8 100%);
+            min-height: 100vh;
+            user-select: none;
+        }
+
+        .font-school {
+            font-family: 'Andika', sans-serif;
+        }
+
+        .app-window {
+            background: #fffdfa;
+            backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.12);
+            border: 4px solid #ffffff;
+        }
+
+        .card-yellow-frame {
+            background-color: #fffdf0;
+            border: 3.5px solid #fde047;
+            border-radius: 2rem;
+            box-shadow: 0 10px 25px rgba(250, 204, 21, 0.15);
+        }
+
+        /* ESTILOS DE SÍLABAS Y COLORES */
+        .syl-bg-pa { background-color: #f43f5e !important; color: white !important; border-color: #e11d48 !important; }
+        .syl-bg-pe { background-color: #0284c7 !important; color: white !important; border-color: #0369a1 !important; }
+        .syl-bg-pi { background-color: #10b981 !important; color: white !important; border-color: #047857 !important; }
+        .syl-bg-po { background-color: #f97316 !important; color: white !important; border-color: #ea580c !important; }
+        .syl-bg-pu { background-color: #a855f7 !important; color: white !important; border-color: #9333ea !important; }
+
+        .btn-syllable {
+            transition: all 0.15s ease;
+            box-shadow: 0 5px 0px rgba(0,0,0,0.18);
+            border-radius: 1.25rem;
+        }
+        .btn-syllable:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0px rgba(0,0,0,0.18);
+        }
+
+        /* Iconos 3D Animados Flotantes */
+        @keyframes float3d {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-10px) rotate(4deg) scale(1.06); }
+        }
+        .icon-3d-animated {
+            display: inline-block;
+            animation: float3d 3s ease-in-out infinite;
+            filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.15));
+        }
+
+        /* Giro del Bombo */
+        @keyframes spinBombo {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.15); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        .bombo-spinning {
+            animation: spinBombo 0.2s linear infinite;
+        }
+
+        /* Botones 3D */
+        .btn-3d-orange {
+            background: #f59e0b; color: white; box-shadow: 0 6px 0px #d97706; border-radius: 1.5rem; transition: all 0.15s ease;
+        }
+        .btn-3d-orange:active { transform: translateY(4px); box-shadow: 0 2px 0px #d97706; }
+
+        .btn-3d-indigo {
+            background: #6366f1; color: white; box-shadow: 0 6px 0px #4338ca; border-radius: 1.5rem; transition: all 0.15s ease;
+        }
+        .btn-3d-indigo:active { transform: translateY(4px); box-shadow: 0 2px 0px #4338ca; }
+
+        .btn-3d-pink {
+            background: #ec4899; color: white; box-shadow: 0 6px 0px #be185d; border-radius: 1.5rem; transition: all 0.15s ease;
+        }
+        .btn-3d-pink:active { transform: translateY(4px); box-shadow: 0 2px 0px #be185d; }
+
+        .btn-3d-green {
+            background: #10b981; color: white; box-shadow: 0 6px 0px #047857; border-radius: 1.5rem; transition: all 0.15s ease;
+        }
+        .btn-3d-green:active { transform: translateY(4px); box-shadow: 0 2px 0px #047857; }
+
+        /* Animación Error Parpadeo */
+        @keyframes blinkError {
+            0%, 100% { background-color: #fecdd3; border-color: #f43f5e; transform: scale(1); }
+            50% { background-color: #fda4af; border-color: #e11d48; transform: scale(1.08); }
+        }
+        .cell-error { animation: blinkError 0.35s ease-in-out 3; }
+
+        /* RECUADRO TARGET MEJORADO */
+        .target-dropzone {
+            border: 3.5px dashed #cbd5e1;
+            background-color: #ffffff;
+            width: 5.5rem;
+            height: 4.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1.25rem;
+            transition: all 0.25s ease;
+        }
+
+        .notebook-lines {
+            background: linear-gradient(to bottom, #ffffff 0%, #ffffff 30%, #e0f2fe 30%, #e0f2fe 35%, #ffffff 35%, #ffffff 65%, #e0f2fe 65%, #e0f2fe 70%, #ffffff 70%);
+            background-size: 100% 60px;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* MARCO DIPLOMA LECTURA */
+        .diploma-border {
+            background: #fffdf5;
+            border: 12px double #d97706;
+            box-shadow: 0 15px 35px rgba(217, 119, 6, 0.25);
+            border-radius: 2rem;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-2 md:p-6 min-h-screen">
+
+    <div class="app-window w-full max-w-5xl p-4 md:p-8 flex flex-col justify-between min-h-[92vh]">
+
+        <!-- ENCABEZADO Y NAVEGACIÓN -->
+        <div>
+            <header class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-indigo-100">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="showScreen('screen-home')">
+                    <div class="w-13 h-13 bg-indigo-500 rounded-2xl flex items-center justify-center text-white text-3xl font-black shadow-lg">
+                        P
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-black text-indigo-950 leading-tight">APRENDEMOS LA LETRA P p</h1>
+                        <p class="text-xs font-extrabold text-pink-500 uppercase tracking-wide">LECTOESCRITURA INFANTIL Y PRIMARIA</p>
+                    </div>
+                </div>
+
+                <!-- BOTÓN GUÍA DIDÁCTICA A LA IZQUIERDA DEL BOTÓN ESCUCHAR -->
+                <div class="flex items-center gap-2">
+                    <button onclick="showScreen('screen-guide')" class="bg-amber-500 hover:bg-amber-600 text-white font-extrabold px-4 py-2.5 rounded-2xl shadow-md transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-graduation-cap text-base"></i> GUÍA DIDÁCTICA
+                    </button>
+
+                    <button onclick="speakMotivator('Aprendemos la letra P. Selecciona un juego para comenzar')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-4 py-2.5 rounded-2xl shadow-md transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-volume-high text-base"></i> Escuchar
+                    </button>
+                </div>
+            </header>
+
+            <!-- MENÚ DE NAVEGACIÓN -->
+            <nav class="flex items-center gap-2 overflow-x-auto py-3 no-scrollbar text-xs font-bold border-b border-slate-100">
+                <button onclick="showScreen('screen-home')" class="px-3.5 py-2 rounded-xl bg-amber-100 text-amber-800 hover:bg-amber-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-house"></i> Inicio
+                </button>
+                <button onclick="showScreen('screen-tracing')" class="px-3.5 py-2 rounded-xl bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-pen-line"></i> Trazado
+                </button>
+                <button onclick="showScreen('screen-video')" class="px-3.5 py-2 rounded-xl bg-cyan-100 text-cyan-700 hover:bg-cyan-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-video"></i> Vídeo
+                </button>
+                <button onclick="showScreen('screen-syllables')" class="px-3.5 py-2 rounded-xl bg-rose-100 text-rose-700 hover:bg-rose-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-shapes"></i> Sílabas
+                </button>
+                <button onclick="showScreen('screen-missing')" class="px-3.5 py-2 rounded-xl bg-amber-200/70 text-amber-900 hover:bg-amber-300 transition whitespace-nowrap">
+                    <i class="fa-solid fa-circle-question"></i> ¿Qué falta?
+                </button>
+                <button onclick="showScreen('screen-bingo')" class="px-3.5 py-2 rounded-xl bg-orange-100 text-orange-800 hover:bg-orange-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-dice"></i> Bingo
+                </button>
+                <button onclick="showScreen('screen-vocab')" class="px-3.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 hover:bg-emerald-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-book-open"></i> Vocabulario
+                </button>
+                <button onclick="showScreen('screen-table1')" class="px-3.5 py-2 rounded-xl bg-purple-100 text-purple-700 hover:bg-purple-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-table-cells"></i> Tabla 1
+                </button>
+                <button onclick="showScreen('screen-table2')" class="px-3.5 py-2 rounded-xl bg-teal-100 text-teal-800 hover:bg-teal-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-border-all"></i> Tabla 2
+                </button>
+                <button onclick="showScreen('screen-sentences')" class="px-3.5 py-2 rounded-xl bg-pink-100 text-pink-800 hover:bg-pink-200 transition whitespace-nowrap">
+                    <i class="fa-solid fa-book"></i> Oraciones
+                </button>
+            </nav>
+        </div>
+
+        <!-- CONTENIDO DINÁMICO -->
+        <main class="my-4">
+
+            <!-- 1. INICIO -->
+            <section id="screen-home" class="screen-content text-center py-2">
+                <div class="text-amber-600 font-extrabold text-sm mb-3 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-star text-amber-400"></i> ¡Bienvenidos a la aventura de aprender a leer! <i class="fa-solid fa-star text-amber-400"></i>
+                </div>
+
+                <div class="bg-indigo-50/80 border-2 border-indigo-200 rounded-3xl p-6 max-w-xl mx-auto mb-6 shadow-sm">
+                    <h2 class="text-4xl md:text-5xl font-black text-indigo-950 mb-1 tracking-tight">
+                        LA LETRA <span class="text-rose-500">P</span> <span class="text-emerald-500">p</span>
+                    </h2>
+                    <p class="text-xs font-extrabold text-indigo-800 uppercase tracking-wider">APRENDE JUGANDO CON EL PINGÜINO PAULINO</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 md:gap-6 max-w-2xl mx-auto mb-6">
+                    <div onclick="speakText('Pelota')" class="bg-sky-100/90 border-3 border-sky-300 rounded-3xl p-5 text-center shadow-lg cursor-pointer hover:scale-105 transition">
+                        <div class="text-6xl md:text-7xl mb-2 icon-3d-animated">⚽</div>
+                        <div class="font-black text-slate-800 text-lg md:text-xl mb-1">PELOTA</div>
+                        <span class="inline-block syl-bg-pe text-2xl md:text-3xl font-black px-5 py-1 rounded-2xl shadow">pe</span>
+                    </div>
+                    <div onclick="speakText('Pato')" class="bg-amber-100/90 border-3 border-amber-300 rounded-3xl p-5 text-center shadow-lg cursor-pointer hover:scale-105 transition">
+                        <div class="text-6xl md:text-7xl mb-2 icon-3d-animated">🦆</div>
+                        <div class="font-black text-slate-800 text-lg md:text-xl mb-1">PATO</div>
+                        <span class="inline-block syl-bg-pa text-2xl md:text-3xl font-black px-5 py-1 rounded-2xl shadow">pa</span>
+                    </div>
+                    <div onclick="speakText('Perro')" class="bg-rose-100/90 border-3 border-rose-300 rounded-3xl p-5 text-center shadow-lg cursor-pointer hover:scale-105 transition">
+                        <div class="text-6xl md:text-7xl mb-2 icon-3d-animated">🐶</div>
+                        <div class="font-black text-slate-800 text-lg md:text-xl mb-1">PERRO</div>
+                        <span class="inline-block syl-bg-pe text-2xl md:text-3xl font-black px-5 py-1 rounded-2xl shadow">pe</span>
+                    </div>
+                </div>
+
+                <div class="max-w-md mx-auto space-y-3">
+                    <button onclick="showScreen('screen-bingo')" class="btn-3d-orange w-full py-4 px-6 font-black text-lg flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-dice text-2xl"></i> ¡JUGAR AL BINGO DE SÍLABAS!
+                    </button>
+                    <button onclick="showScreen('screen-tracing')" class="btn-3d-indigo w-full py-4 px-6 font-black text-lg flex items-center justify-center gap-3">
+                        ¡COMENZAR APRENDIZAJE! <i class="fa-solid fa-play text-base"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 2. TRAZADO -->
+            <section id="screen-tracing" class="screen-content hidden text-center">
+                <h2 class="text-3xl font-black text-slate-800 mb-1">Trazado de la Letra P ✍</h2>
+                <p class="text-slate-600 font-bold text-sm mb-4">Repasa la Mayúscula a la izquierda y la Minúscula a la derecha.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-4">
+                    <div class="bg-indigo-50/70 border-3 border-indigo-200 rounded-3xl p-3 shadow-inner relative">
+                        <div class="bg-indigo-600 text-white font-extrabold text-xs py-1 px-3 rounded-full inline-block mb-2">
+                            P MAYÚSCULA
+                        </div>
+                        <div class="relative w-full h-52 border-2 border-dashed border-indigo-300 rounded-2xl overflow-hidden bg-white">
+                            <div class="absolute inset-0 flex items-center justify-center font-school text-indigo-200 text-9xl font-bold select-none pointer-events-none opacity-50">
+                                P
+                            </div>
+                            <canvas id="tracing-canvas-uppercase" class="relative z-10 w-full h-full cursor-crosshair"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-pink-50/70 border-3 border-pink-200 rounded-3xl p-3 shadow-inner relative">
+                        <div class="bg-pink-500 text-white font-extrabold text-xs py-1 px-3 rounded-full inline-block mb-2">
+                            p MINÚSCULA
+                        </div>
+                        <div class="relative w-full h-52 border-2 border-dashed border-pink-300 rounded-2xl overflow-hidden bg-white">
+                            <div class="absolute inset-0 flex items-center justify-center font-school text-pink-200 text-9xl font-bold select-none pointer-events-none opacity-50">
+                                p
+                            </div>
+                            <canvas id="tracing-canvas-lowercase" class="relative z-10 w-full h-full cursor-crosshair"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-3">
+                    <button onclick="clearTracingCanvases()" class="bg-rose-500 hover:bg-rose-600 text-white font-black px-6 py-2.5 rounded-2xl shadow transition">
+                        <i class="fa-solid fa-eraser"></i> Borrar Todo
+                    </button>
+                    <button onclick="showScreen('screen-video')" class="btn-3d-orange px-6 py-2.5 font-black">
+                        Siguiente: Vídeo ➔
+                    </button>
+                </div>
+            </section>
+
+            <!-- 3. VÍDEO CON PINGÜINO PAULINO -->
+            <section id="screen-video" class="screen-content hidden text-center max-w-4xl mx-auto">
+                <h2 class="text-3xl font-black text-slate-800 mb-4">Aprende con el Pingüino Paulino 🐧</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <div class="bg-amber-100/70 border-3 border-amber-300 rounded-3xl p-5 flex flex-col items-center justify-center shadow-lg">
+                        <div class="text-8xl mb-2 icon-3d-animated">🐧</div>
+                        <span class="bg-amber-500 text-white font-black text-sm px-3 py-1 rounded-full uppercase tracking-wider mb-1">
+                            ¡HOLA! SOY PAULINO
+                        </span>
+                        <p class="text-amber-900 font-extrabold text-xs">"¡Acompáñame a cantar la canción de la letra P!"</p>
+                    </div>
+
+                    <div class="md:col-span-2 bg-slate-900 p-6 md:p-8 rounded-3xl text-white shadow-2xl border-4 border-indigo-200">
+                        <div class="text-6xl mb-3 icon-3d-animated">🎬</div>
+                        <h3 class="text-2xl font-black text-amber-300 mb-2">Las Sílabas pa, pe, pi, po, pu</h3>
+                        <p class="text-slate-300 text-sm mb-6 font-medium">Disfruta del vídeo explicativo para cantar y repetir los sonidos de la letra P.</p>
+                        <a href="https://youtu.be/kc_rPNTA9Qg" target="_blank" class="inline-flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white font-black px-8 py-3.5 rounded-2xl shadow-lg transition transform hover:scale-105">
+                            <i class="fa-brands fa-youtube text-2xl"></i> Ver Vídeo Interactivo
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button onclick="showScreen('screen-syllables')" class="btn-3d-orange px-8 py-3 font-black text-base">
+                        Siguiente: Sílabas ➔
+                    </button>
+                </div>
+            </section>
+
+            <!-- 4. SÍLABAS -->
+            <section id="screen-syllables" class="screen-content hidden text-center">
+                <div class="inline-block bg-rose-100 text-rose-800 text-xs font-black px-4 py-1 rounded-full mb-1 uppercase tracking-wider">
+                    APRENDEMOS LAS SÍLABAS
+                </div>
+                <h2 class="text-3xl md:text-4xl font-black text-indigo-950 mb-1">SÍLABAS DIRECTAS: pa, pe, pi, po, pu</h2>
+                <p class="text-slate-600 font-bold text-xs md:text-sm mb-5">Pulsa en cada sílaba o en el icono de altavoz para escuchar su sonido.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-6 items-stretch">
+                    <div class="bg-indigo-50/80 border-2 border-indigo-200 rounded-3xl p-6 flex flex-col items-center justify-center text-center">
+                        <span class="text-indigo-600 font-extrabold text-xs tracking-wider uppercase mb-3">FONEMA /P/</span>
+                        <div onclick="speakText('P')" class="w-32 h-32 bg-indigo-600 rounded-3xl flex items-center justify-center text-white text-6xl font-black shadow-lg cursor-pointer hover:scale-105 transition mb-3">
+                            P p
+                        </div>
+                        <span class="text-indigo-600 font-extrabold text-xs">¡Pulsa para escuchar el fonema!</span>
+                    </div>
+
+                    <div class="space-y-2.5 flex flex-col justify-between">
+                        <!-- PA -->
+                        <div class="bg-rose-100/70 border-2 border-rose-300 rounded-2xl p-2.5 flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-2">
+                                <button onclick="speakText('pa')" class="w-11 h-11 syl-bg-pa rounded-xl text-2xl font-black flex items-center justify-center shadow">pa</button>
+                                <button onclick="speakText('pa')" class="w-9 h-9 bg-white text-rose-600 rounded-xl flex items-center justify-center shadow hover:bg-rose-50 transition">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                </button>
+                                <span class="font-extrabold text-slate-800 text-base ml-1">P + A = <span class="text-rose-600 font-black">PA</span></span>
+                            </div>
+                            <button onclick="speakText('Pato')" class="flex items-center gap-2 text-slate-700 font-bold text-sm bg-white/80 px-3 py-1 rounded-xl hover:bg-white transition">
+                                <span>🦆 Pato</span> <i class="fa-solid fa-volume-high text-rose-500"></i>
+                            </button>
+                        </div>
+
+                        <!-- PE -->
+                        <div class="bg-sky-100/70 border-2 border-sky-300 rounded-2xl p-2.5 flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-2">
+                                <button onclick="speakText('pe')" class="w-11 h-11 syl-bg-pe rounded-xl text-2xl font-black flex items-center justify-center shadow">pe</button>
+                                <button onclick="speakText('pe')" class="w-9 h-9 bg-white text-sky-600 rounded-xl flex items-center justify-center shadow hover:bg-sky-50 transition">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                </button>
+                                <span class="font-extrabold text-slate-800 text-base ml-1">P + E = <span class="text-sky-600 font-black">PE</span></span>
+                            </div>
+                            <button onclick="speakText('Pelota')" class="flex items-center gap-2 text-slate-700 font-bold text-sm bg-white/80 px-3 py-1 rounded-xl hover:bg-white transition">
+                                <span>⚽ Pelota</span> <i class="fa-solid fa-volume-high text-sky-500"></i>
+                            </button>
+                        </div>
+
+                        <!-- PI -->
+                        <div class="bg-emerald-100/70 border-2 border-emerald-300 rounded-2xl p-2.5 flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-2">
+                                <button onclick="speakText('pi')" class="w-11 h-11 syl-bg-pi rounded-xl text-2xl font-black flex items-center justify-center shadow">pi</button>
+                                <button onclick="speakText('pi')" class="w-9 h-9 bg-white text-emerald-600 rounded-xl flex items-center justify-center shadow hover:bg-emerald-50 transition">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                </button>
+                                <span class="font-extrabold text-slate-800 text-base ml-1">P + I = <span class="text-emerald-600 font-black">PI</span></span>
+                            </div>
+                            <button onclick="speakText('Pino')" class="flex items-center gap-2 text-slate-700 font-bold text-sm bg-white/80 px-3 py-1 rounded-xl hover:bg-white transition">
+                                <span>🌲 Pino</span> <i class="fa-solid fa-volume-high text-emerald-500"></i>
+                            </button>
+                        </div>
+
+                        <!-- PO -->
+                        <div class="bg-amber-100/70 border-2 border-amber-300 rounded-2xl p-2.5 flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-2">
+                                <button onclick="speakText('po')" class="w-11 h-11 syl-bg-po rounded-xl text-2xl font-black flex items-center justify-center shadow">po</button>
+                                <button onclick="speakText('po')" class="w-9 h-9 bg-white text-amber-600 rounded-xl flex items-center justify-center shadow hover:bg-amber-50 transition">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                </button>
+                                <span class="font-extrabold text-slate-800 text-base ml-1">P + O = <span class="text-amber-600 font-black">PO</span></span>
+                            </div>
+                            <button onclick="speakText('Pomo')" class="flex items-center gap-2 text-slate-700 font-bold text-sm bg-white/80 px-3 py-1 rounded-xl hover:bg-white transition">
+                                <span>🚪 Pomo</span> <i class="fa-solid fa-volume-high text-amber-500"></i>
+                            </button>
+                        </div>
+
+                        <!-- PU -->
+                        <div class="bg-purple-100/70 border-2 border-purple-300 rounded-2xl p-2.5 flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-2">
+                                <button onclick="speakText('pu')" class="w-11 h-11 syl-bg-pu rounded-xl text-2xl font-black flex items-center justify-center shadow">pu</button>
+                                <button onclick="speakText('pu')" class="w-9 h-9 bg-white text-purple-600 rounded-xl flex items-center justify-center shadow hover:bg-purple-50 transition">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                </button>
+                                <span class="font-extrabold text-slate-800 text-base ml-1">P + U = <span class="text-purple-600 font-black">PU</span></span>
+                            </div>
+                            <button onclick="speakText('Pulpo')" class="flex items-center gap-2 text-slate-700 font-bold text-sm bg-white/80 px-3 py-1 rounded-xl hover:bg-white transition">
+                                <span>🐙 Pulpo</span> <i class="fa-solid fa-volume-high text-purple-500"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="showScreen('screen-missing')" class="btn-3d-green px-8 py-3 font-black text-base">
+                    Siguiente: Juego ¿Qué falta? ➔
+                </button>
+            </section>
+
+            <!-- 5. ¿QUÉ SÍLABA FALTA? -->
+            <section id="screen-missing" class="screen-content hidden text-center">
+                <div class="inline-block bg-amber-200/80 text-amber-900 text-xs font-black px-4 py-1.5 rounded-full mb-1 uppercase tracking-wider">
+                    DISCRIMINACIÓN FONOLÓGICA ALEATORIA
+                </div>
+                <h2 class="text-3xl md:text-4xl font-black text-indigo-950 mb-1">¿Qué sílaba falta?</h2>
+                <p class="text-slate-600 font-bold text-sm mb-4">Pulsa sobre la sílaba adecuada para encajarla en el recuadro.</p>
+
+                <div class="card-yellow-frame max-w-lg mx-auto p-6 relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <span id="missing-counter" class="bg-indigo-600 text-white font-extrabold text-xs px-3.5 py-1.5 rounded-full">
+                            Palabra 1 de 10
+                        </span>
+                        <button onclick="nextMissingWord()" class="bg-white border-2 border-amber-300 text-amber-800 font-black text-xs px-3.5 py-1.5 rounded-full hover:bg-amber-50">
+                            Siguiente Palabra ➔
+                        </button>
+                    </div>
+
+                    <div id="missing-icon" class="text-8xl mb-3 flex justify-center icon-3d-animated">🌲</div>
+
+                    <div class="flex items-center justify-center gap-2 mb-6">
+                        <div class="bg-white border-2 border-indigo-200 rounded-3xl px-6 py-4 flex items-center gap-3 shadow-md">
+                            <div id="target-box" class="target-dropzone shadow-inner">
+                                <span id="missing-syllable-box" class="text-3xl font-black text-slate-300">?</span>
+                            </div>
+                            <span id="missing-rest-word" class="text-3xl font-black text-indigo-950">NO</span>
+                            <button onclick="speakCurrentMissingWord()" class="text-indigo-500 hover:text-indigo-700 ml-1 text-2xl">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-2 mb-4 max-w-md mx-auto">
+                        <button onclick="checkMissing('PA')" class="syl-bg-pa btn-syllable font-black text-2xl py-3 shadow-md">PA</button>
+                        <button onclick="checkMissing('PE')" class="syl-bg-pe btn-syllable font-black text-2xl py-3 shadow-md">PE</button>
+                        <button onclick="checkMissing('PI')" class="syl-bg-pi btn-syllable font-black text-2xl py-3 shadow-md">PI</button>
+                        <button onclick="checkMissing('PO')" class="syl-bg-po btn-syllable font-black text-2xl py-3 shadow-md">PO</button>
+                        <button onclick="checkMissing('PU')" class="syl-bg-pu btn-syllable font-black text-2xl py-3 shadow-md">PU</button>
+                    </div>
+
+                    <div id="missing-feedback" class="text-indigo-900 font-black text-sm min-h-[24px]">
+                        Pulsa una sílaba para probar
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <button onclick="showScreen('screen-bingo')" class="btn-3d-orange font-black text-base px-8 py-3">
+                        Siguiente: ¡Bingo de Sílabas! ➔
+                    </button>
+                </div>
+            </section>
+
+            <!-- 6. BINGO DE SÍLABAS -->
+            <section id="screen-bingo" class="screen-content hidden text-center">
+                <div class="inline-block bg-orange-200 text-orange-900 text-xs font-black px-4 py-1 rounded-full mb-1 uppercase tracking-wider">
+                    JUEGO INTERACTIVO DE BINGO
+                </div>
+                <h2 class="text-3xl font-black text-indigo-950 mb-1">🎰 ¡BINGO DE SÍLABAS! 🎰</h2>
+                <p class="text-slate-600 font-bold text-xs mb-4">Pulsa únicamente la casilla que coincida con la bola en juego.</p>
+
+                <div class="card-yellow-frame max-w-lg mx-auto p-4 mb-4 flex items-center justify-between gap-4">
+                    <div class="text-center">
+                        <span class="text-[10px] font-black text-slate-500 uppercase block mb-1">BOMBO</span>
+                        <div id="bombo-icon" class="text-5xl">🔮</div>
+                    </div>
+
+                    <div class="text-center">
+                        <span class="text-[10px] font-black text-slate-500 uppercase block mb-1">BOLA EN JUEGO</span>
+                        <div id="bingo-ball-display" class="w-16 h-16 syl-bg-pe text-white rounded-full flex items-center justify-center text-2xl font-black shadow-md mx-auto relative border-2 border-white">
+                            PE
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <button id="btn-draw-ball" onclick="spinAndDrawBingoBall()" class="btn-3d-orange px-4 py-2 text-xs font-black flex items-center gap-1">
+                            <i class="fa-solid fa-rotate"></i> SACAR BOLA
+                        </button>
+                        <button onclick="initBingo()" class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 font-bold px-4 py-1.5 rounded-xl text-xs">
+                            <i class="fa-solid fa-arrows-rotate"></i> Reiniciar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="border-2 border-indigo-300 rounded-3xl p-4 max-w-md mx-auto bg-white shadow-md mb-5">
+                    <div class="bg-indigo-600 text-white font-extrabold text-xs py-1.5 px-4 rounded-xl mb-3 flex items-center justify-between">
+                        <span>💳 TU CARTÓN DE BINGO</span>
+                        <span id="bingo-score-tag">0 / 9</span>
+                    </div>
+
+                    <div id="bingo-grid" class="grid grid-cols-3 gap-2.5"></div>
+                </div>
+
+                <button onclick="showScreen('screen-vocab')" class="btn-3d-pink font-black text-base px-8 py-3">
+                    Siguiente: Vocabulario Visual ➔
+                </button>
+            </section>
+
+            <!-- 7. VOCABULARIO VISUAL -->
+            <section id="screen-vocab" class="screen-content hidden text-center">
+                <div class="inline-block bg-emerald-100 text-emerald-800 text-xs font-black px-4 py-1 rounded-full mb-1 uppercase tracking-wider">
+                    VOCABULARIO VISUAL (10 PANTALLAS - 30 PALABRAS)
+                </div>
+                <h2 class="text-3xl font-black text-indigo-950 mb-1">Lectura de Palabras (Página <span id="vocab-page-num">1</span>/10)</h2>
+                <p class="text-slate-600 font-bold text-xs mb-4">Pulsa en cada tarjeta para escuchar la palabra completa.</p>
+
+                <div id="vocab-cards-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-5"></div>
+
+                <div class="flex flex-wrap items-center justify-center gap-1.5 mb-5 max-w-2xl mx-auto">
+                    <button onclick="changeVocabPage(-1)" class="bg-indigo-200 text-indigo-800 font-bold px-3 py-1.5 rounded-xl text-xs">❮</button>
+                    <div id="vocab-pagination-btns" class="flex flex-wrap justify-center gap-1"></div>
+                    <button onclick="changeVocabPage(1)" class="bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs">❯</button>
+                </div>
+
+                <div>
+                    <button onclick="showScreen('screen-table1')" class="btn-3d-pink font-black text-base px-8 py-3">
+                        Siguiente: Tabla de Colores 1 ➔
+                    </button>
+                </div>
+            </section>
+
+            <!-- 8. TABLA DE COLORES 1 -->
+            <section id="screen-table1" class="screen-content hidden text-center">
+                <div class="inline-block bg-purple-100 text-purple-800 text-xs font-black px-4 py-1 rounded-full mb-1 uppercase tracking-wider">
+                    DISCRIMINACIÓN VISUAL - TABLA 1
+                </div>
+                <h2 class="text-3xl font-black text-indigo-950 mb-1">Tabla 1: Sílabas PA y PE</h2>
+                <p class="text-slate-600 font-bold text-xs mb-4">Pulsa sobre PA (Rojo) y PE (Azul) para colorear la tabla.</p>
+
+                <div class="border-3 border-purple-200 rounded-3xl p-5 max-w-3xl mx-auto bg-white shadow-md mb-6">
+                    <div class="flex items-center justify-between mb-4 border-b pb-3 flex-wrap gap-2">
+                        <span class="font-black text-base text-indigo-900">SEÑALA EN LA TABLA:</span>
+                        <div class="flex gap-3">
+                            <div class="syl-bg-pa border-2 rounded-2xl py-2 px-6 font-black text-2xl shadow-md flex items-center gap-2">
+                                <span>PA</span>
+                                <button onclick="speakText('PA')" class="text-white hover:opacity-80 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                            <div class="syl-bg-pe border-2 rounded-2xl py-2 px-6 font-black text-2xl shadow-md flex items-center gap-2">
+                                <span>PE</span>
+                                <button onclick="speakText('PE')" class="text-white hover:opacity-80 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="matrix-grid-1" class="grid grid-cols-5 gap-3.5"></div>
+                </div>
+
+                <button onclick="showScreen('screen-table2')" class="btn-3d-indigo font-black text-base px-8 py-3">
+                    Siguiente Tabla (PI, PO, PU) ➔
+                </button>
+            </section>
+
+            <!-- 9. TABLA DE COLORES 2 -->
+            <section id="screen-table2" class="screen-content hidden text-center">
+                <div class="inline-block bg-teal-100 text-teal-800 text-xs font-black px-4 py-1 rounded-full mb-1 uppercase tracking-wider">
+                    DISCRIMINACIÓN VISUAL - TABLA 2
+                </div>
+                <h2 class="text-3xl font-black text-indigo-950 mb-1">Tabla 2: Sílabas PI, PO y PU</h2>
+                <p class="text-slate-600 font-bold text-xs mb-4">Pulsa en PI (Verde), PO (Naranja) y PU (Morado) para colorear.</p>
+
+                <div class="border-3 border-teal-200 rounded-3xl p-5 max-w-3xl mx-auto bg-white shadow-md mb-6">
+                    <div class="flex items-center justify-between mb-4 border-b pb-3 flex-wrap gap-2">
+                        <span class="font-black text-base text-indigo-900">SEÑALA EN LA TABLA:</span>
+                        <div class="flex gap-2.5">
+                            <div class="syl-bg-pi border-2 rounded-2xl py-2 px-4 font-black text-2xl shadow-md flex items-center gap-1.5">
+                                <span>PI</span>
+                                <button onclick="speakText('PI')" class="text-white hover:opacity-80 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                            <div class="syl-bg-po border-2 rounded-2xl py-2 px-4 font-black text-2xl shadow-md flex items-center gap-1.5">
+                                <span>PO</span>
+                                <button onclick="speakText('PO')" class="text-white hover:opacity-80 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                            <div class="syl-bg-pu border-2 rounded-2xl py-2 px-4 font-black text-2xl shadow-md flex items-center gap-1.5">
+                                <span>PU</span>
+                                <button onclick="speakText('PU')" class="text-white hover:opacity-80 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="matrix-grid-2" class="grid grid-cols-5 gap-3.5"></div>
+                </div>
+
+                <button onclick="showScreen('screen-sentences')" class="btn-3d-green font-black text-base px-8 py-3">
+                    Siguiente: Lectura de Oraciones ➔
+                </button>
+            </section>
+
+            <!-- 10. ORACIONES CON BOTÓN SIGUIENTE -->
+            <section id="screen-sentences" class="screen-content hidden text-center">
+                <div class="inline-block bg-pink-100 text-pink-800 text-xs font-black px-4 py-1 rounded-full mb-1 uppercase tracking-wider">
+                    RINCÓN DE LECTURA
+                </div>
+                <h2 class="text-3xl font-black text-indigo-950 mb-1">¡Leemos oraciones con la P!</h2>
+                <p class="text-slate-600 font-bold text-xs mb-5">Pulsa en cada frase para escuchar la narración adaptada.</p>
+
+                <div class="space-y-3 max-w-xl mx-auto mb-6">
+                    <div onclick="speakText('Mi papá me ama')" class="notebook-lines border-2 border-sky-200 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:border-indigo-400 cursor-pointer transition">
+                        <div class="flex items-center gap-3 font-school text-xl font-bold text-slate-800">
+                            <span class="text-3xl icon-3d-animated">👨‍👦</span>
+                            <span>Mi <span class="text-rose-600 font-black">pa</span>pá me ama.</span>
+                        </div>
+                        <div class="bg-indigo-100 text-indigo-600 rounded-xl w-9 h-9 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="speakText('El pato pisa el pan')" class="notebook-lines border-2 border-sky-200 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:border-indigo-400 cursor-pointer transition">
+                        <div class="flex items-center gap-3 font-school text-xl font-bold text-slate-800">
+                            <span class="text-3xl icon-3d-animated">🦆🥖</span>
+                            <span>El <span class="text-rose-600 font-black">pa</span>to <span class="text-emerald-600 font-black">pi</span>sa el <span class="text-rose-600 font-black">pa</span>n.</span>
+                        </div>
+                        <div class="bg-indigo-100 text-indigo-600 rounded-xl w-9 h-9 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="speakText('La pipa de Pepe')" class="notebook-lines border-2 border-sky-200 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:border-indigo-400 cursor-pointer transition">
+                        <div class="flex items-center gap-3 font-school text-xl font-bold text-slate-800">
+                            <span class="text-3xl icon-3d-animated">🍿👦</span>
+                            <span>La <span class="text-emerald-600 font-black">pi</span><span class="text-rose-600 font-black">pa</span> de <span class="text-sky-600 font-black">Pe</span>pe.</span>
+                        </div>
+                        <div class="bg-indigo-100 text-indigo-600 rounded-xl w-9 h-9 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="speakText('El pulpo juega a la pelota')" class="notebook-lines border-2 border-sky-200 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:border-indigo-400 cursor-pointer transition">
+                        <div class="flex items-center gap-3 font-school text-xl font-bold text-slate-800">
+                            <span class="text-3xl icon-3d-animated">🐙⚽</span>
+                            <span>El <span class="text-purple-600 font-black">pu</span>lpo juega a la <span class="text-sky-600 font-black">pe</span>lota.</span>
+                        </div>
+                        <div class="bg-indigo-100 text-indigo-600 rounded-xl w-9 h-9 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="showScreen('screen-congratulations')" class="btn-3d-orange font-black text-base px-8 py-3">
+                    Siguiente: Felicitación ➔
+                </button>
+            </section>
+
+            <!-- 11. PANTALLA DE FELICITACIÓN Y DIPLOMA -->
+            <section id="screen-congratulations" class="screen-content hidden text-center max-w-3xl mx-auto">
+                <div class="diploma-border p-6 md:p-8 relative overflow-hidden my-2">
+                    
+                    <div class="flex items-center justify-center gap-3 mb-2">
+                        <div class="text-6xl icon-3d-animated">🐧</div>
+                        <div class="text-5xl icon-3d-animated">🏆</div>
+                        <div class="text-6xl icon-3d-animated">🎓</div>
+                    </div>
+
+                    <h2 class="text-3xl md:text-4xl font-black text-amber-700 uppercase tracking-tight mb-3">
+                        ¡DIPLOMA DE SUPERLECTOR/A!
+                    </h2>
+
+                    <div class="bg-amber-100/80 border-2 border-amber-300 rounded-2xl p-4 mb-5 max-w-xl mx-auto shadow-sm">
+                        <p id="congrat-text" class="text-slate-800 font-extrabold text-base md:text-lg leading-relaxed">
+                            "Yo el <span class="text-indigo-600">Pingüino Paulino</span> os felicito por el aprendizaje de la P. ¡Chicos y chicas de 1º de primaria no olvidéis leer en casa esta tarde para seguir aprendiendo y así poder realizar más juegos en clase!"
+                        </p>
+                    </div>
+
+                    <button onclick="speakCongratulationMessage()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-black text-sm px-6 py-2.5 rounded-2xl shadow-md transition inline-flex items-center gap-2 mb-6">
+                        <i class="fa-solid fa-volume-high text-lg"></i> ESCUCHAR A PAULINO
+                    </button>
+
+                    <div class="border-t-2 border-dashed border-amber-300 pt-4 flex items-center justify-around">
+                        <div class="text-center">
+                            <span class="block text-xs font-black text-amber-800 uppercase">PROFESOR/A</span>
+                            <span class="font-school text-indigo-900 font-bold text-lg">Carlos Garrido</span>
+                        </div>
+                        <div class="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center text-white text-3xl shadow-lg border-2 border-white">
+                            ⭐
+                        </div>
+                        <div class="text-center">
+                            <span class="block text-xs font-black text-amber-800 uppercase">CURSO</span>
+                            <span class="font-bold text-indigo-900 text-base">1º Primaria</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 flex justify-center gap-4">
+                    <button onclick="triggerConfetti()" class="btn-3d-pink font-black text-base px-6 py-3">
+                        🎉 ¡Celebrar con Confeti!
+                    </button>
+                    <button onclick="showScreen('screen-home')" class="btn-3d-indigo font-black text-base px-6 py-3">
+                        <i class="fa-solid fa-house"></i> Volver al Inicio
+                    </button>
+                </div>
+            </section>
+
+            <!-- 12. GUÍA DIDÁCTICA -->
+            <section id="screen-guide" class="screen-content hidden text-left max-w-4xl mx-auto">
+                <div class="text-center mb-6">
+                    <div class="inline-block bg-amber-500 text-white text-xs font-black px-4 py-1.5 rounded-full mb-1 uppercase tracking-wider shadow">
+                        RECURSO PARA DOCENTES Y FAMILIAS
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black text-indigo-950 mb-2">📚 GUÍA DIDÁCTICA: LETRA P</h2>
+                    <p class="text-slate-600 font-bold text-sm">Secuencia metodológica paso a paso para el aprendizaje significativo del fonema y grafema P.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-indigo-50 border-3 border-indigo-200 rounded-3xl p-5 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-12 h-12 bg-indigo-600 text-white text-xl font-black rounded-2xl flex items-center justify-center shadow">1</div>
+                            <h3 class="text-xl font-black text-indigo-950">Sensibilización y Fonética 🔊</h3>
+                        </div>
+                        <p class="text-slate-700 font-semibold text-sm leading-relaxed pl-15">
+                            Presentación del personaje motivador (Pingüino Paulino). Articulación del fonema oclusivo bilabial sordo <strong>/p/</strong> uniendo los labios y soltando aire con energía ("sonido de explosión").
+                        </p>
+                    </div>
+
+                    <div class="bg-pink-50 border-3 border-pink-200 rounded-3xl p-5 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-12 h-12 bg-pink-500 text-white text-xl font-black rounded-2xl flex items-center justify-center shadow">2</div>
+                            <h3 class="text-xl font-black text-pink-950">Grafomotricidad y Trazado ✍</h3>
+                        </div>
+                        <p class="text-slate-700 font-semibold text-sm leading-relaxed pl-15">
+                            Reconocimiento y trazo guiado de la letra <strong>P mayúscula</strong> y <strong>p minúscula</strong>. Trabajo táctil y visual en lienzo interactivo reforzando la dirección correcta del lápiz.
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50 border-3 border-rose-200 rounded-3xl p-5 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-12 h-12 bg-rose-500 text-white text-xl font-black rounded-2xl flex items-center justify-center shadow">3</div>
+                            <h3 class="text-xl font-black text-rose-950">Construcción Silábica Directa 🧩</h3>
+                        </div>
+                        <p class="text-slate-700 font-semibold text-sm leading-relaxed pl-15">
+                            Asociación consonante + vocal para formar sílabas directas: <strong>PA, PE, PI, PO, PU</strong>. Cada sílaba cuenta con un color representativo unificado en toda la app para facilitar la memoria visual.
+                        </p>
+                    </div>
+
+                    <div class="bg-amber-50 border-3 border-amber-200 rounded-3xl p-5 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-12 h-12 bg-amber-500 text-white text-xl font-black rounded-2xl flex items-center justify-center shadow">4</div>
+                            <h3 class="text-xl font-black text-amber-950">Discriminación Auditiva y Juegos 🎲</h3>
+                        </div>
+                        <p class="text-slate-700 font-semibold text-sm leading-relaxed pl-15">
+                            Práctica interactiva mediante el juego <strong>¿Qué sílaba falta?</strong> y el <strong>Bingo de Sílabas</strong>. Refuerza la atención, el feedback auditivo inmediato y la corrección de errores sin frustración.
+                        </p>
+                    </div>
+
+                    <div class="bg-emerald-50 border-3 border-emerald-200 rounded-3xl p-5 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-12 h-12 bg-emerald-500 text-white text-xl font-black rounded-2xl flex items-center justify-center shadow">5</div>
+                            <h3 class="text-xl font-black text-emerald-950">Vocabulario y Lectura Global 📖</h3>
+                        </div>
+                        <p class="text-slate-700 font-semibold text-sm leading-relaxed pl-15">
+                            Exploración de 30 palabras asociadas a imágenes reales o dibujos en 10 tarjetas dinámicas. Automatización de la lectura global y ampliación del léxico significativo.
+                        </p>
+                    </div>
+
+                    <div class="bg-purple-50 border-3 border-purple-200 rounded-3xl p-5 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-12 h-12 bg-purple-600 text-white text-xl font-black rounded-2xl flex items-center justify-center shadow">6</div>
+                            <h3 class="text-xl font-black text-purple-950">Consolidación LECTORA Y ORACIONES 🚀</h3>
+                        </div>
+                        <p class="text-slate-700 font-semibold text-sm leading-relaxed pl-15">
+                            Aplicación en tablas de discriminación visual rápida y lectura de oraciones completas contextualizadas con pauta escolar y pictogramas comprensivos.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-6">
+                    <button onclick="showScreen('screen-home')" class="btn-3d-indigo font-black text-base px-8 py-3">
+                        <i class="fa-solid fa-house"></i> Volver al Inicio
+                    </button>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- PIE DE PÁGINA -->
+        <footer class="text-center pt-3 border-t border-slate-200 text-xs font-bold text-indigo-950">
+            <p>Aplicación Interactiva creada por <span class="font-black text-indigo-700">Carlos Garrido</span></p>
+            <p class="text-slate-400 font-medium text-[10px] mt-0.5">Recurso de Lectoescritura Infantil y Primaria</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // MAPEO DE COLORES
+        const sylColorClasses = {
+            'PA': 'syl-bg-pa',
+            'PE': 'syl-bg-pe',
+            'PI': 'syl-bg-pi',
+            'PO': 'syl-bg-po',
+            'PU': 'syl-bg-pu'
+        };
+
+        // NAVEGACIÓN
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(screenId);
+            if (target) target.classList.remove('hidden');
+
+            if (screenId === 'screen-tracing') {
+                setTimeout(initTracingCanvases, 100);
+            } else if (screenId === 'screen-congratulations') {
+                triggerConfetti();
+                speakCongratulationMessage();
+            }
+        }
+
+        // VOZ GENERAL
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // VOZ PAULINO ENTUSIASTA
+        function speakMotivator(text, pitch = 1.35, rate = 0.85) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES';
+                utterance.pitch = pitch;
+                utterance.rate = rate;
+
+                const voices = window.speechSynthesis.getVoices();
+                const femaleVoice = voices.find(v => v.lang.startsWith('es') && (v.name.includes('Monica') || v.name.includes('Laura') || v.name.includes('Helena') || v.name.includes('Luciana') || v.name.includes('Google español')));
+                if (femaleVoice) utterance.voice = femaleVoice;
+
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakCongratulationMessage() {
+            const msg = "Yo el Pingüino Paulino os felicito por el aprendizaje de la p. ¡Chicos y chicas de primero de primaria no olvidéis leer en casa esta tarde para seguir aprendiendo y así poder realizar más juegos en clase!";
+            speakMotivator(msg, 1.3, 0.88);
+        }
+
+        function triggerConfetti() {
+            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        }
+
+        // TRAZADO
+        let canvasUpper, ctxUpper, canvasLower, ctxLower;
+        let isDrawingUpper = false, isDrawingLower = false;
+
+        function initTracingCanvases() {
+            canvasUpper = document.getElementById('tracing-canvas-uppercase');
+            if (canvasUpper) {
+                const rectU = canvasUpper.getBoundingClientRect();
+                canvasUpper.width = rectU.width;
+                canvasUpper.height = rectU.height;
+                ctxUpper = canvasUpper.getContext('2d');
+                ctxUpper.strokeStyle = '#4f46e5';
+                ctxUpper.lineWidth = 10;
+                ctxUpper.lineCap = 'round';
+
+                canvasUpper.onmousedown = (e) => startDraw(e, ctxUpper, canvasUpper, 'U');
+                canvasUpper.onmousemove = (e) => draw(e, ctxUpper, canvasUpper, isDrawingUpper);
+                canvasUpper.onmouseup = () => isDrawingUpper = false;
+                canvasUpper.ontouchstart = (e) => startDraw(e.touches[0], ctxUpper, canvasUpper, 'U');
+                canvasUpper.ontouchmove = (e) => { draw(e.touches[0], ctxUpper, canvasUpper, isDrawingUpper); e.preventDefault(); };
+                canvasUpper.ontouchend = () => isDrawingUpper = false;
+            }
+
+            canvasLower = document.getElementById('tracing-canvas-lowercase');
+            if (canvasLower) {
+                const rectL = canvasLower.getBoundingClientRect();
+                canvasLower.width = rectL.width;
+                canvasLower.height = rectL.height;
+                ctxLower = canvasLower.getContext('2d');
+                ctxLower.strokeStyle = '#ec4899';
+                ctxLower.lineWidth = 10;
+                ctxLower.lineCap = 'round';
+
+                canvasLower.onmousedown = (e) => startDraw(e, ctxLower, canvasLower, 'L');
+                canvasLower.onmousemove = (e) => draw(e, ctxLower, canvasLower, isDrawingLower);
+                canvasLower.onmouseup = () => isDrawingLower = false;
+                canvasLower.ontouchstart = (e) => startDraw(e.touches[0], ctxLower, canvasLower, 'L');
+                canvasLower.ontouchmove = (e) => { draw(e.touches[0], ctxLower, canvasLower, isDrawingLower); e.preventDefault(); };
+                canvasLower.ontouchend = () => isDrawingLower = false;
+            }
+        }
+
+        function startDraw(e, ctx, canvas, type) {
+            if (type === 'U') isDrawingUpper = true;
+            if (type === 'L') isDrawingLower = true;
+            ctx.beginPath();
+            const rect = canvas.getBoundingClientRect();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e, ctx, canvas, active) {
+            if (!active) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        }
+
+        function clearTracingCanvases() {
+            if (ctxUpper) ctxUpper.clearRect(0, 0, canvasUpper.width, canvasUpper.height);
+            if (ctxLower) ctxLower.clearRect(0, 0, canvasLower.width, canvasLower.height);
+        }
+
+        // ¿QUÉ SÍLABA FALTA?
+        const missingWordsListOriginal = [
+            { syl: 'PI', rest: 'NO', name: 'PINO', icon: '🌲' },
+            { syl: 'PA', rest: 'TO', name: 'PATO', icon: '🦆' },
+            { syl: 'PA', rest: 'LA', name: 'PALA', icon: '🔨' },
+            { syl: 'PE', rest: 'LOTA', name: 'PELOTA', icon: '⚽' },
+            { syl: 'PE', rest: 'RRO', name: 'PERRO', icon: '🐶' },
+            { syl: 'PI', rest: 'E', name: 'PIE', icon: '🦶' },
+            { syl: 'PO', rest: 'MO', name: 'POMO', icon: '🚪' },
+            { syl: 'PO', rest: 'ZO', name: 'POZO', icon: '🕳' },
+            { syl: 'PU', rest: 'LPO', name: 'PULPO', icon: '🐙' },
+            { syl: 'PU', rest: 'MA', name: 'PUMA', icon: '🐆' }
+        ];
+
+        let shuffledMissingWords = [];
+        let currentMissingIdx = 0;
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function initMissingGame() {
+            shuffledMissingWords = shuffleArray(missingWordsListOriginal);
+            currentMissingIdx = 0;
+            loadMissingWord(currentMissingIdx);
+        }
+
+        function loadMissingWord(idx) {
+            const item = shuffledMissingWords[idx];
+            document.getElementById('missing-counter').textContent = `Palabra ${idx + 1} de ${shuffledMissingWords.length}`;
+            document.getElementById('missing-icon').textContent = item.icon;
+            document.getElementById('missing-rest-word').textContent = item.rest;
+            
+            const dropzone = document.getElementById('target-box');
+            const box = document.getElementById('missing-syllable-box');
+            
+            dropzone.className = "target-dropzone shadow-inner";
+            dropzone.style.backgroundColor = "#ffffff";
+            box.textContent = "?";
+            box.className = "text-3xl font-black text-slate-300";
+
+            document.getElementById('missing-feedback').textContent = "Pulsa una sílaba para probar";
+        }
+
+        function checkMissing(selected) {
+            const item = shuffledMissingWords[currentMissingIdx];
+            const dropzone = document.getElementById('target-box');
+            const box = document.getElementById('missing-syllable-box');
+
+            box.textContent = selected;
+
+            const selectedColorClass = sylColorClasses[selected];
+
+            if (selected === item.syl) {
+                dropzone.className = `target-dropzone ${selectedColorClass} shadow-lg border-2 border-white`;
+                box.className = "text-3xl font-black text-white";
+
+                document.getElementById('missing-feedback').textContent = `¡Muy bien! ${item.name} 🎉`;
+                speakMotivator(`¡Muy bien! ${item.name}`);
+                confetti({ particleCount: 40, spread: 60 });
+            } else {
+                dropzone.className = `target-dropzone ${selectedColorClass} opacity-80`;
+                box.className = "text-3xl font-black text-white";
+
+                document.getElementById('missing-feedback').textContent = "Fíjate bien prueba de nuevo ❌";
+                speakMotivator("Fíjate bien prueba de nuevo");
+            }
+        }
+
+        function speakCurrentMissingWord() {
+            const item = shuffledMissingWords[currentMissingIdx];
+            speakText(item.name);
+        }
+
+        function nextMissingWord() {
+            currentMissingIdx = (currentMissingIdx + 1) % shuffledMissingWords.length;
+            loadMissingWord(currentMissingIdx);
+        }
+
+        // BINGO DE SÍLABAS
+        const bingoSyls = ['PA', 'PE', 'PI', 'PO', 'PU', 'PE', 'PA', 'PI', 'PU'];
+        let currentBingoBall = 'PE';
+        let bingoScore = 0;
+        let isSpinning = false;
+
+        function initBingo() {
+            const grid = document.getElementById('bingo-grid');
+            grid.innerHTML = '';
+            bingoScore = 0;
+            document.getElementById('bingo-score-tag').textContent = `0 / 9`;
+
+            bingoSyls.forEach((syl, index) => {
+                const btn = document.createElement('button');
+                btn.className = "bg-amber-50 border-2 border-amber-300 rounded-2xl py-4 font-black text-2xl text-indigo-950 shadow-sm transition";
+                btn.textContent = syl;
+                btn.id = `bingo-cell-${index}`;
+
+                btn.onclick = () => {
+                    if (btn.dataset.marked === "true") return;
+
+                    if (syl === currentBingoBall) {
+                        btn.dataset.marked = "true";
+                        const colorClass = sylColorClasses[syl];
+                        btn.className = `${colorClass} border-2 rounded-2xl py-4 font-black text-2xl shadow-md transition`;
+                        bingoScore++;
+                        document.getElementById('bingo-score-tag').textContent = `${bingoScore} / 9`;
+
+                        if (bingoScore === 9) {
+                            speakMotivator("¡BINGO! ¡BINGO! ¡Enhorabuena hemos completado el cartón!", 1.45, 0.9);
+                            confetti({ particleCount: 150, spread: 90 });
+                        } else {
+                            speakMotivator("¡CORRECTO!");
+                        }
+                    } else {
+                        btn.classList.add('cell-error');
+                        setTimeout(() => btn.classList.remove('cell-error'), 1100);
+                        speakMotivator("Fíjate bien prueba de nuevo");
+                    }
+                };
+                grid.appendChild(btn);
+            });
+            updateBingoBallDisplay('PE');
+        }
+
+        function updateBingoBallDisplay(syl) {
+            const ball = document.getElementById('bingo-ball-display');
+            ball.textContent = syl;
+            ball.className = `w-16 h-16 ${sylColorClasses[syl]} text-white rounded-full flex items-center justify-center text-2xl font-black shadow-md mx-auto relative border-2 border-white`;
+        }
+
+        function spinAndDrawBingoBall() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            const bombo = document.getElementById('bombo-icon');
+            bombo.classList.add('bombo-spinning');
+
+            const list = ['PA', 'PE', 'PI', 'PO', 'PU'];
+            let counter = 0;
+
+            const interval = setInterval(() => {
+                const randomSyl = list[Math.floor(Math.random() * list.length)];
+                updateBingoBallDisplay(randomSyl);
+                counter++;
+
+                if (counter > 12) {
+                    clearInterval(interval);
+                    bombo.classList.remove('bombo-spinning');
+                    currentBingoBall = list[Math.floor(Math.random() * list.length)];
+                    updateBingoBallDisplay(currentBingoBall);
+                    speakMotivator(`Bola ${currentBingoBall}`);
+                    isSpinning = false;
+                }
+            }, 100);
+        }
+
+        // VOCABULARIO
+        const vocabData10Pages = {
+            1: [{ name: 'PELOTA', pic: '⚽' }, { name: 'PATO', pic: '🦆' }, { name: 'PINO', pic: '🌲' }],
+            2: [{ name: 'POMO', pic: '🚪' }, { name: 'PULPO', pic: '🐙' }, { name: 'PIE', pic: '🦶' }],
+            3: [{ name: 'PAPA', pic: '🥔' }, { name: 'PERRO', pic: '🐶' }, { name: 'PUMA', pic: '🐆' }],
+            4: [{ name: 'PALA', pic: '🔨' }, { name: 'PAVO', pic: '🦃' }, { name: 'PECHO', pic: '👕' }],
+            5: [{ name: 'PEPA', pic: '🍉' }, { name: 'PIPA', pic: '🍿' }, { name: 'PIÑA', pic: '🍍' }],
+            6: [{ name: 'POZO', pic: '🕳' }, { name: 'POLLO', pic: '🐥' }, { name: 'PUERTA', pic: '🚪' }],
+            7: [{ name: 'PUENTE', pic: '🌉' }, { name: 'PAN', pic: '🥖' }, { name: 'PEZ', pic: '🐟' }],
+            8: [{ name: 'PINGÜINO', pic: '🐧' }, { name: 'PAYASO', pic: '🤡' }, { name: 'PIANO', pic: '🎹' }],
+            9: [{ name: 'PIRATA', pic: '🏴‍☠' }, { name: 'PARQUE', pic: '🛝' }, { name: 'PINCEL', pic: '🖌️' }],
+            10: [{ name: 'PALOMA', pic: '🕊️' }, { name: 'PALMERA', pic: '🌴' }, { name: 'PASTEL', pic: '🎂' }]
+        };
+
+        let currentVocabPage = 1;
+
+        function renderVocabPage(page) {
+            currentVocabPage = page;
+            document.getElementById('vocab-page-num').textContent = page;
+            const container = document.getElementById('vocab-cards-container');
+            container.innerHTML = '';
+
+            const btnNav = document.getElementById('vocab-pagination-btns');
+            btnNav.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const b = document.createElement('button');
+                b.textContent = i;
+                b.className = i === page 
+                    ? "w-8 h-8 rounded-xl font-black text-xs bg-indigo-600 text-white shadow" 
+                    : "w-8 h-8 rounded-xl font-black text-xs bg-indigo-100 text-indigo-800 hover:bg-indigo-200";
+                b.onclick = () => renderVocabPage(i);
+                btnNav.appendChild(b);
+            }
+
+            vocabData10Pages[page].forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white border-3 border-indigo-100 rounded-3xl p-6 text-center shadow-md hover:scale-105 cursor-pointer transition flex flex-col items-center justify-center";
+                card.onclick = () => speakText(item.name);
+                card.innerHTML = `
+                    <div class="text-7xl mb-3 icon-3d-animated">${item.pic}</div>
+                    <div class="font-black text-indigo-950 text-2xl tracking-wide uppercase mb-2">${item.name}</div>
+                    <div class="text-indigo-400 text-base"><i class="fa-solid fa-volume-high"></i></div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function changeVocabPage(delta) {
+            let p = currentVocabPage + delta;
+            if (p < 1) p = 1;
+            if (p > 10) p = 10;
+            renderVocabPage(p);
+        }
+
+        // TABLAS DE COLORES 1 Y 2
+        const matrixData1 = [
+            'PA', 'MA', 'PE', 'TA', 'PA',
+            'LA', 'PE', 'PA', 'SA', 'PE',
+            'PA', 'PE', 'MA', 'PA', 'LA',
+            'PE', 'SA', 'PE', 'PA', 'PE'
+        ];
+
+        const matrixData2 = [
+            'PI', 'PO', 'PU', 'TA', 'PI',
+            'LA', 'PU', 'PO', 'PI', 'PU',
+            'PO', 'PI', 'MA', 'PU', 'PO',
+            'PU', 'SA', 'PI', 'PO', 'PI'
+        ];
+
+        function renderMatrices() {
+            // Tabla 1
+            const grid1 = document.getElementById('matrix-grid-1');
+            grid1.innerHTML = '';
+            matrixData1.forEach(syl => {
+                const btn = document.createElement('button');
+                btn.className = "bg-slate-50 border-2 border-slate-200 rounded-2xl py-4 font-black text-slate-700 text-2xl shadow-sm hover:bg-slate-100 transition";
+                btn.textContent = syl;
+                btn.onclick = () => {
+                    if (syl === 'PA') {
+                        btn.className = "syl-bg-pa border-2 rounded-2xl py-4 font-black text-2xl shadow-md";
+                        speakText(syl);
+                    } else if (syl === 'PE') {
+                        btn.className = "syl-bg-pe border-2 rounded-2xl py-4 font-black text-2xl shadow-md";
+                        speakText(syl);
+                    } else {
+                        btn.classList.add('cell-error');
+                        setTimeout(() => btn.classList.remove('cell-error'), 1100);
+                        speakMotivator("Fíjate bien prueba de nuevo");
+                    }
+                };
+                grid1.appendChild(btn);
+            });
+
+            // Tabla 2
+            const grid2 = document.getElementById('matrix-grid-2');
+            grid2.innerHTML = '';
+            matrixData2.forEach(syl => {
+                const btn = document.createElement('button');
+                btn.className = "bg-slate-50 border-2 border-slate-200 rounded-2xl py-4 font-black text-slate-700 text-2xl shadow-sm hover:bg-slate-100 transition";
+                btn.textContent = syl;
+                btn.onclick = () => {
+                    if (syl === 'PI') {
+                        btn.className = "syl-bg-pi border-2 rounded-2xl py-4 font-black text-2xl shadow-md";
+                        speakText(syl);
+                    } else if (syl === 'PO') {
+                        btn.className = "syl-bg-po border-2 rounded-2xl py-4 font-black text-2xl shadow-md";
+                        speakText(syl);
+                    } else if (syl === 'PU') {
+                        btn.className = "syl-bg-pu border-2 rounded-2xl py-4 font-black text-2xl shadow-md";
+                        speakText(syl);
+                    } else {
+                        btn.classList.add('cell-error');
+                        setTimeout(() => btn.classList.remove('cell-error'), 1100);
+                        speakMotivator("Fíjate bien prueba de nuevo");
+                    }
+                };
+                grid2.appendChild(btn);
+            });
+        }
+
+        // INICIALIZACIÓN
+        window.onload = function() {
+            initMissingGame();
+            initBingo();
+            renderVocabPage(1);
+            renderMatrices();
+        };
+    </script>
+</body>
+</html>
